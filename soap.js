@@ -48,7 +48,7 @@ module.exports = function(options) {
       queue.push({path: path, service: service, wsdl: wsdl})
     } else {
       var srv = soap.listen(server, '/' + serviceName, service, wsdl)
-      srv.log = seneca.log.debug
+      srv.log = seneca.log.debug.bind(seneca.log)
     }
   }
   function processQueue() {
@@ -57,7 +57,7 @@ module.exports = function(options) {
       var serviceDef = queue.pop()
 
       var srv = soap.listen(server, serviceDef.path, serviceDef.service, serviceDef.wsdl)
-      srv.log = seneca.log.debug
+      srv.log = seneca.log.debug.bind(seneca.log)
 
     }
   }
@@ -79,6 +79,14 @@ module.exports = function(options) {
 
   })
 
+	seneca.add('role:seneca,cmd:close',function(msg,done) {
+		if(server) {
+			server.close()
+		}
+		return this.prior(msg,done)
+	})
+
+	
   return {
     name: pluginName
   }

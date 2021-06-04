@@ -2,26 +2,32 @@
 var assert = require('assert')
 var fs     = require('fs')
 
-var seneca = require('seneca')()
+var Seneca = require('seneca')
 
-seneca.use('../soap.js')
+
 
 describe('soap', function() {
 
   this.timeout(10*1000)
 
-  var callCount = 0
-  seneca.add({role: 'soap-test', cmd: 'ping'}, function(args, callback) {
-    callCount ++
-    callback(undefined, {greeting: 'pong ' + args.name})
-  })
 
+	/*
   before(function(done) {
     seneca.ready(done)
   })
+	*/
 
+	let seneca = null
+	
+	
   it('register', function(done) {
-
+		seneca = Seneca().use('../soap.js')
+		var callCount = 0
+		seneca.add({role: 'soap-test', cmd: 'ping'}, function(args, callback) {
+			callCount ++
+			callback(undefined, {greeting: 'pong ' + args.name})
+		})
+		
     seneca.act({
       role: 'soap',
       cmd: 'register',
@@ -54,7 +60,8 @@ describe('soap', function() {
 
         assert.ok(result)
         assert.equal(result.greeting, 'pong ' + args.name)
-        done()
+
+				seneca.close(done)
       })
     })
 

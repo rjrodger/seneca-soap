@@ -1,10 +1,14 @@
 {
   "name": "seneca-soap",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "seneca soap API",
   "main": "soap.js",
   "scripts": {
-    "test": "mocha test --reporter spec"
+    "xtest": "mocha test --reporter spec",
+		"test": "mocha test",
+		"build": "echo no-build",
+    "clean": "rm -rf node_modules package-lock.json yarn.lock",
+    "reset": "yarn run clean && yarn install && yarn test"
   },
   "repository": {
     "type": "git",
@@ -25,14 +29,12 @@
 
   "dependencies": {
     "soap": "0.4.5",
-    "underscore": "1.6.0"
-  },
-
-  "peerDependencies": {
-    "seneca": ""
+    "underscore": "1.13.1"
   },
 
   "devDependencies": {
-    "mocha": "1.18.2"
+    "mocha": "8.4.0",
+		"seneca3": "npm:seneca@3.23.3",
+		"seneca": "i-Sight/seneca.git#v0.7.4-isight"
   }
 }
